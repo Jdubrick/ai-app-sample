@@ -4,7 +4,7 @@ import time
 
 import gradio as gr
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import PromptTemplate
+from langchain_core.prompts import ChatPromptTemplate
 from langchain import OpenAI
 from langchain_core.runnables import RunnablePassthrough
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
