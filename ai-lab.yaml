@@ -16,12 +16,12 @@ application:
       ports:
         - 8001
       image: quay.io/jdubrick-ai/llamacpp_python:latest
-    - name: streamlit-summary-app
+    - name: gradio-summary-app
       contextdir: .
       containerfile: Containerfile
       arch:
         - arm64
         - amd64
       ports:
-        - 8501
+        - 7860
       image: quay.io/jdubrick-ai/new-sample-app:latest

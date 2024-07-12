@@ -5,7 +5,7 @@ import time
 import gradio as gr
 from langchain_openai import ChatOpenAI
 
-model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:7860")
+model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
 
 def checking_model_service():
