@@ -4,7 +4,9 @@ import time
 
 import gradio as gr
 from langchain_openai import ChatOpenAI
+from langchain_core.prompts import PromptTemplate
 from langchain import OpenAI
+from langchain_core.runnables import RunnablePassthrough
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
 
@@ -31,10 +33,21 @@ llm = OpenAI(base_url=model_service,
                  api_key="EMPTY",
                  streaming=True)
 
+# Define the Langchain chain
+prompt = ChatPromptTemplate.from_template("""You are an helpful code assistant that can help developer to code for a given {input}. 
+                                          Generate the code block at first, and explain the code at the end.
+                                          If the {input} is not making sense, please ask for more clarification.""")
+chain = (
+    {"input": RunnablePassthrough()}
+    | prompt
+    | llm
+)
+
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    response = llm.complete(prompt=user_input, max_tokens=50)
-    return response['choices'][0]['text'].strip()
+    response = chain.invoke(user_input)
+    return response.content
+    
 
 # Create a Gradio interface
 iface = gr.Interface(
