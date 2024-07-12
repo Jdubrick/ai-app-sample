@@ -45,7 +45,9 @@ chain = (
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
+    print(f"User input: {user_input}")
     response = chain.invoke(user_input)
+    print(f"Response: {response}")
     return response
     
 
