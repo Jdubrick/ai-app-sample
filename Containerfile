@@ -3,6 +3,6 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
-COPY src/chatbot_ui.py .
+COPY src/sample-app.py .
 EXPOSE 7860
 ENTRYPOINT [ "python", "sample-app.py" ]
