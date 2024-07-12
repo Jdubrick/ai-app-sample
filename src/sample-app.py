@@ -33,21 +33,29 @@ llm = ChatOpenAI(base_url=model_service,
                  api_key="EMPTY",
                  streaming=True)
 
-# Define the Langchain chain
-prompt = ChatPromptTemplate.from_template("""You are an helpful code assistant that can help developer to code for a given {input}. 
-                                          Generate the code block at first, and explain the code at the end.
-                                          If the {input} is not making sense, please ask for more clarification.""")
-chain = (
-    {"input": RunnablePassthrough()}
-    | prompt
-    | llm
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "You are a helpful assistant that translates {input_language} to {output_language}.",
+        ),
+        ("human", "{input}"),
+    ]
 )
+
+chain = prompt | llm
+
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    response = chain.invoke(user_input)
-    print(response)
-    return response
+    response = chain.invoke(
+        {
+            "input_language": "English",
+            "output_language": "German",
+            "input": f"{user_input}",
+        }
+    )
+    return response.content
     
 
 # Create a Gradio interface
