@@ -50,7 +50,7 @@ chain = prompt | llm | StrOutputParser()
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    chain.invoke(
+    return chain.invoke(
         {
             "input_language": "English",
             "output_language": "German",
