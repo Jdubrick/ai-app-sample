@@ -7,6 +7,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain import OpenAI
 from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
+
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
 
@@ -43,19 +45,18 @@ prompt = ChatPromptTemplate.from_messages(
     ]
 )
 
-chain = prompt | llm
+chain = prompt | llm | StrOutputParser()
 
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    response = chain.invoke(
+    chain.invoke(
         {
             "input_language": "English",
             "output_language": "German",
             "input": f"{user_input}",
         }
     )
-    return response.content
     
 
 # Create a Gradio interface
