@@ -5,4 +5,5 @@ RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 COPY src/sample-app.py .
 EXPOSE 7860
+USER root
 ENTRYPOINT [ "python", "sample-app.py" ]

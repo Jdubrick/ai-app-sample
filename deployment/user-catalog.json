@@ -1,7 +1,7 @@
 {
 	"recipes": [
 	{
-      "id": "ai-app-sample",
+      "id": "ai-app-sample-new",
       "description" : "Code Generation Application example that generate code in countless programming languages.",
       "name" : "Test Application",
       "repository": "https://github.com/Jdubrick/ai-app-sample",
