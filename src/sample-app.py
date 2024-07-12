@@ -28,7 +28,7 @@ def checking_model_service():
 checking_model_service()
 model_name = os.getenv("MODEL_NAME", "")
 
-llm = OpenAI(base_url=model_service,
+llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
                  api_key="EMPTY",
                  streaming=True)
@@ -45,10 +45,8 @@ chain = (
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    print(f"User input: {user_input}")
     response = chain.invoke(user_input)
-    print(f"Response: {response}")
-    return response
+    return response.content
     
 
 # Create a Gradio interface
