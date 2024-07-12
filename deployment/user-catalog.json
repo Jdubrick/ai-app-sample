@@ -1,0 +1,27 @@
+{
+	"recipes": [
+	{
+      "id": "ai-app-sample",
+      "description" : "Code Generation Application example that generate code in countless programming languages.",
+      "name" : "Test Application",
+      "repository": "https://github.com/Jdubrick/ai-app-sample",
+      "icon": "natural-language-processing",
+      "categories": [
+        "local-development"
+      ],
+      "readme": "# Local Deployment\nInstructions for deploying locally here or readme about the project",
+      "models": [
+        "hf.instructlab.granite-7b-lab-GGUF",
+        "hf.instructlab.merlinite-7b-lab-GGUF"
+      ]
+    }
+	],
+  "models": [],
+  "categories": [
+    {
+        "id": "local-development",
+        "name": "Local Development",
+        "description" : "Applications currently in development."
+      }
+  ]
+}
