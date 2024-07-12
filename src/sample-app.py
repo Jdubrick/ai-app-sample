@@ -46,7 +46,7 @@ chain = (
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
     response = chain.invoke(user_input)
-    return response.content
+    return response
     
 
 # Create a Gradio interface
