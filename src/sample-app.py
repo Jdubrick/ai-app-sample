@@ -53,21 +53,36 @@ chain = prompt | llm
 # chain = LLMChain(llm=llm, prompt=prompt)
 
 # Define a function to generate chatbot responses
-def chatbot_response(user_input):
+def chatbot_response(message, history):
     res = chain.invoke(
-        {"messages": [HumanMessage(content=f"{user_input}")]}
+        {"messages": [HumanMessage(content=f"{message}")]}
     )
     return res.content
     
 
 # Create a Gradio interface
-iface = gr.Interface(
+# iface = gr.Interface(
+#     fn=chatbot_response,
+#     inputs="text",
+#     outputs="text",
+#     title="Translator Bot",
+#     description="A simple chatbot using LangChain and Gradio",
+# )
+
+iface = gr.ChatInterface(
     fn=chatbot_response,
-    inputs="text",
-    outputs="text",
+    chatbot=gr.Chatbot(height=300),
+    textbox=gr.Textbox(placeholder="Tell me anything to translate", container=False, scale=7),
     title="Translator Bot",
-    description="A simple chatbot using LangChain and Gradio",
+    description="Translate anything",
+    theme="soft",
+    cache_examples=True,
+    retry_btn=None,
+    undo_btn="Delete Previous",
+    clear_btn="Clear"
+
 )
+
 
 # Launch the interface
 if __name__ == "__main__":
