@@ -37,9 +37,10 @@ llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
                  api_key="EMPTY",
                  max_tokens=None,
+                 temperature=0
                  )
 
-prompt = ChatPromptTemplate.from_template("Translate the sentence after the colon from English to German: {message}")
+prompt = ChatPromptTemplate.from_template("You are the best language translator in the world. You are going to directly translate the sentence after the colon from English to German but you will first prefix it by telling us what the original sentence was: {message}")
 chain = prompt | llm
 
 def llm_result(message):
