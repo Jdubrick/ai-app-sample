@@ -10,6 +10,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_core.messages import HumanMessage, AIMessage
+
+
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
 
@@ -37,40 +39,14 @@ llm = ChatOpenAI(base_url=model_service,
                  max_tokens=None,
                  )
 
-# prompt = ChatPromptTemplate.from_messages(
-#     [
-#         (
-#             "system",
-#             "You are a helpful assistant. Translate all questions to the best of your ability from English to German.",
-#         ),
-#         MessagesPlaceholder(variable_name="messages"),
-#     ]
-# )
+def llm_result(message):
+    return f"Your message was {message}"
 
-# chain = prompt | llm
+with gr.blocks() as demo:
+    gr.Markdown("Enter a sentence you wish to be translated and hit **Run** to see the output.")
+    inpt = gr.Textbox(placeholder="Sentence to translate")
+    outpt = gr.Textbox(placeholder="Translation ...", ) 
+    btn = gr.Button("Run")
+    btn.click(fn=llm_result, inputs=inpt, outputs=outpt)
 
-# # chain = LLMChain(llm=llm, prompt=prompt)
-
-# # Define a function to generate chatbot responses
-# def chatbot_response(message, history):
-#     res = chain.invoke(
-#         {"messages": [HumanMessage(content=f"{message}")]}
-#     )
-#     return res.content
-    
-
-def predict(message, history):
-    history_langchain_format = []
-    for human, ai in history:
-        history_langchain_format.append(HumanMessage(content=human))
-        history_langchain_format.append(AIMessage(content=ai))
-    history_langchain_format.append(HumanMessage(content=message))
-    gpt_response = llm(history_langchain_format)
-    return gpt_response.content
-
-iface = gr.ChatInterface(predict)
-
-
-# Launch the interface
-if __name__ == "__main__":
-    iface.launch()
+demo.launch()
