@@ -9,8 +9,8 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from langchain_core.messages import HumanMessage
-
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import AIMessage, HumanMessage
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
 
