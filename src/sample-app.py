@@ -8,6 +8,8 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain import OpenAI
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
 
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
@@ -33,30 +35,38 @@ model_name = os.getenv("MODEL_NAME", "")
 llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
                  api_key="EMPTY",
-                 streaming=True)
+                 max_tokens=None,
+                 streaming=False)
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            "You are a helpful assistant that translates {input_language} to {output_language}.",
-        ),
-        ("human", "{input}"),
-    ]
+# prompt = ChatPromptTemplate.from_messages(
+#     [
+#         (
+#             "system",
+#             "You are a helpful assistant that translates {input_language} to {output_language}.",
+#         ),
+#         ("human", "{input}"),
+#     ]
+# )
+
+# chain = prompt | llm | StrOutputParser()
+prompt = PromptTemplate(
+    input_variables=["sentence"],
+    template="Translate this sentence from English to German: {sentence}?",
 )
 
-chain = prompt | llm | StrOutputParser()
-
+chain = LLMChain(llm=llm, prompt=prompt)
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    return chain.invoke(
-        {
-            "input_language": "English",
-            "output_language": "German",
-            "input": f"{user_input}",
-        }
-    )
+    res = chain.run(user_input)
+    print(res)
+    # return chain.invoke(
+    #     {
+    #         "input_language": "English",
+    #         "output_language": "German",
+    #         "input": f"{user_input}",
+    #     }
+    # )
     
 
 # Create a Gradio interface
@@ -64,9 +74,8 @@ iface = gr.Interface(
     fn=chatbot_response,
     inputs="text",
     outputs="text",
-    title="LangChain Chatbot",
+    title="Translator Bot",
     description="A simple chatbot using LangChain and Gradio",
-    examples=[["Hello!"], ["What's the weather like?"], ["Tell me a joke."]]
 )
 
 # Launch the interface
