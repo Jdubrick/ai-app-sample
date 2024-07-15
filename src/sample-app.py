@@ -42,7 +42,7 @@ llm = ChatOpenAI(base_url=model_service,
 def llm_result(message):
     return f"Your message was {message}"
 
-with gr.blocks() as demo:
+with gr.Blocks() as demo:
     gr.Markdown("Enter a sentence you wish to be translated and hit **Run** to see the output.")
     inpt = gr.Textbox(placeholder="Sentence to translate")
     outpt = gr.Textbox(placeholder="Translation ...", ) 
