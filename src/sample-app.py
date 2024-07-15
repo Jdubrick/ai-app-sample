@@ -38,6 +38,7 @@ llm = ChatOpenAI(base_url=model_service,
                  api_key="EMPTY",
                  max_tokens=None,
                  temperature=0
+                 streaming=True
                  )
 
 def format_history(msg: str, history: list[list[str, str]], system_prompt: str):
