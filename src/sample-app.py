@@ -40,13 +40,17 @@ llm = ChatOpenAI(base_url=model_service,
                  temperature=0
                  )
 
-prompt = ChatPromptTemplate.from_template("You are the best language translator in the world. You are going to directly translate the sentence after the colon from English to German but you will first prefix it by telling us what the original sentence was: {message}")
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are world class language translator. You translate from English to German as your primary duty."),
+    ("user", "{message}")
+])
 chain = prompt | llm
 
 def llm_result(message):
-    return chain.invoke({
+    res = chain.invoke({
         "message": message
     })
+    return res.content
 
 with gr.Blocks() as demo:
     gr.Markdown("Enter a sentence you wish to be translated and hit **Run** to see the output.")
