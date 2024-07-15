@@ -57,15 +57,10 @@ chain = LLMChain(llm=llm, prompt=prompt)
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
+    print(f"User input: {user_input}")
     res = chain.run(user_input)
-    print(res)
-    # return chain.invoke(
-    #     {
-    #         "input_language": "English",
-    #         "output_language": "German",
-    #         "input": f"{user_input}",
-    #     }
-    # )
+    print(f"Response: {res}")
+    return res
     
 
 # Create a Gradio interface
