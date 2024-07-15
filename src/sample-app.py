@@ -7,7 +7,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
-from langchain.prompts import PromptTemplate
+from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
 from langchain_core.messages import HumanMessage, AIMessage
 
@@ -39,8 +39,13 @@ llm = ChatOpenAI(base_url=model_service,
                  max_tokens=None,
                  )
 
+prompt = ChatPromptTemplate.from_template("Translate the sentence after the colon from English to German: {message}")
+chain = prompt | llm
+
 def llm_result(message):
-    return f"Your message was {message}"
+    return chain.invoke({
+        "message": message
+    })
 
 with gr.Blocks() as demo:
     gr.Markdown("Enter a sentence you wish to be translated and hit **Run** to see the output.")
