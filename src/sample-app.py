@@ -40,22 +40,32 @@ llm = ChatOpenAI(base_url=model_service,
                  temperature=0
                  )
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are a helpful assistant that translates English to French. Translate the user sentence."),
-    ("user", "{input}")
-])
+def format_history(msg: str, history: list[list[str, str]], system_prompt: str):
+    chat_history = [{"role": "system", "content":system_prompt}]
+    for query, response in history:
+        chat_history.append({"role": "user", "content": query})
+        chat_history.append({"role": "assistant", "content": response})  
+    chat_history.append({"role": "user", "content": msg})
+    return chat_history
 
-chain = LLMChain(llm=llm, 
-                prompt=prompt,
-                verbose=False
-                )
+def generate_response(msg: str, history: list[list[str, str]], system_prompt: str):
+    chat_history = format_history(msg, history, system_prompt)
+    response = llm.invoke(msg)
+    message = ""
+    for partial_resp in response:
+        token = partial_resp["message"]["content"]
+        message += token
+        yield message
 
-def handle_response(user_input, history):
-    history.append({"role": "user", "content": user_input})
-    response = chain.invoke(user_input)   
-    history.append({"role": "assistant", "content": response["text"]})
-    print(response)
+chatbot = gr.ChatInterface(
+                generate_response,
+                additional_inputs=[
+                    gr.Textbox(
+                        "Behave as if you are professional writer.",
+                        label="System Prompt"
+                    )
+                ],
+                description="Feel free to ask any question.",
+)
 
-gr.ChatInterface(
-    handle_response,
-).launch()
+chatbot.launch()
