@@ -59,7 +59,7 @@ llm = ChatOpenAI(base_url=model_service,
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
     res = llm.invoke([HumanMessage(content=f"Hi, I'm {user_input}")])
-    return res
+    return res.content
     
 
 # Create a Gradio interface
