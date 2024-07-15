@@ -38,27 +38,25 @@ llm = ChatOpenAI(base_url=model_service,
                  max_tokens=None,
                  )
 
-# prompt = ChatPromptTemplate.from_messages(
-#     [
-#         (
-#             "system",
-#             "You are a helpful assistant that translates {input_language} to {output_language}.",
-#         ),
-#         ("human", "{input}"),
-#     ]
-# )
+prompt = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            "You are a helpful assistant. Translate all questions to the best of your ability from English to German.",
+        ),
+        MessagesPlaceholder(variable_name="messages"),
+    ]
+)
 
-# chain = prompt | llm | StrOutputParser()
-# prompt = PromptTemplate(
-#     input_variables=["sentence"],
-#     template="Translate this sentence from English to German: {sentence}?",
-# )
+chain = prompt | llm
 
 # chain = LLMChain(llm=llm, prompt=prompt)
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    res = llm.invoke([HumanMessage(content=f"Please translate the following sentence from English to German for me: {user_input}")])
+    res = chain.invoke(
+        {"messages": [HumanMessage(content=f"{user_input}")]}
+    )
     return res.content
     
 
