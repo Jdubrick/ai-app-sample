@@ -41,22 +41,22 @@ llm = ChatOpenAI(base_url=model_service,
                  )
 
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are world class language translator. You translate from English to German as your primary duty."),
-    ("user", "{message}")
+    ("system", "You are world class technical advisor."),
+    MessagesPlaceholder(variable_name="history"),
+    ("user", "{input}")
 ])
-chain = prompt | llm
 
-def llm_result(message):
-    res = chain.invoke({
-        "message": message
-    })
-    return res.content
+chain = LLMChain(llm=llm, 
+                prompt=prompt,
+                verbose=False
+                )
 
-with gr.Blocks() as demo:
-    gr.Markdown("Enter a sentence you wish to be translated and hit **Run** to see the output.")
-    inpt = gr.Textbox(placeholder="Sentence to translate")
-    outpt = gr.Textbox(placeholder="Translation ...", ) 
-    btn = gr.Button("Run")
-    btn.click(fn=llm_result, inputs=inpt, outputs=outpt)
+def handle_response(user_input, history):
+    history.append({"role": "user", "content": user_input})
+    response = chain.invoke(user_input)   
+    history.append({"role": "assistant", "content": response["text"]})
+    return response.content
 
-demo.launch()
+gr.ChatInterface(
+    handle_response,
+).launch()
