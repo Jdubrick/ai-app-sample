@@ -38,50 +38,38 @@ llm = ChatOpenAI(base_url=model_service,
                  max_tokens=None,
                  )
 
-prompt = ChatPromptTemplate.from_messages(
-    [
-        (
-            "system",
-            "You are a helpful assistant. Translate all questions to the best of your ability from English to German.",
-        ),
-        MessagesPlaceholder(variable_name="messages"),
-    ]
-)
-
-chain = prompt | llm
-
-# chain = LLMChain(llm=llm, prompt=prompt)
-
-# Define a function to generate chatbot responses
-def chatbot_response(message, history):
-    res = chain.invoke(
-        {"messages": [HumanMessage(content=f"{message}")]}
-    )
-    return res.content
-    
-
-# Create a Gradio interface
-# iface = gr.Interface(
-#     fn=chatbot_response,
-#     inputs="text",
-#     outputs="text",
-#     title="Translator Bot",
-#     description="A simple chatbot using LangChain and Gradio",
+# prompt = ChatPromptTemplate.from_messages(
+#     [
+#         (
+#             "system",
+#             "You are a helpful assistant. Translate all questions to the best of your ability from English to German.",
+#         ),
+#         MessagesPlaceholder(variable_name="messages"),
+#     ]
 # )
 
-iface = gr.ChatInterface(
-    fn=chatbot_response,
-    chatbot=gr.Chatbot(height=300),
-    textbox=gr.Textbox(placeholder="Tell me anything to translate", container=False, scale=7),
-    title="Translator Bot",
-    description="Translate anything",
-    theme="soft",
-    cache_examples=True,
-    retry_btn=None,
-    undo_btn="Delete Previous",
-    clear_btn="Clear"
+# chain = prompt | llm
 
-)
+# # chain = LLMChain(llm=llm, prompt=prompt)
+
+# # Define a function to generate chatbot responses
+# def chatbot_response(message, history):
+#     res = chain.invoke(
+#         {"messages": [HumanMessage(content=f"{message}")]}
+#     )
+#     return res.content
+    
+
+def predict(message, history):
+    history_langchain_format = []
+    for human, ai in history:
+        history_langchain_format.append(HumanMessage(content=human))
+        history_langchain_format.append(AIMessage(content=ai))
+    history_langchain_format.append(HumanMessage(content=message))
+    gpt_response = llm(history_langchain_format)
+    return gpt_response.content
+
+iface = gr.ChatInterface(predict)
 
 
 # Launch the interface
