@@ -54,7 +54,7 @@ def handle_response(user_input, history):
     history.append({"role": "user", "content": user_input})
     response = chain.invoke(user_input)   
     history.append({"role": "assistant", "content": response["text"]})
-    return response.content
+    print(response)
 
 gr.ChatInterface(
     handle_response,
