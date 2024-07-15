@@ -37,8 +37,7 @@ llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
                  api_key="EMPTY",
                  max_tokens=None,
-                 temperature=0,
-                 streaming=True
+                 temperature=0
                  )
 
 def format_history(msg: str, history: list[list[str, str]], system_prompt: str):
@@ -52,11 +51,8 @@ def format_history(msg: str, history: list[list[str, str]], system_prompt: str):
 def generate_response(msg: str, history: list[list[str, str]], system_prompt: str):
     chat_history = format_history(msg, history, system_prompt)
     response = llm.invoke(msg)
-    message = ""
-    for partial_resp in response:
-        token = partial_resp["message"]["content"]
-        message += token
-        yield message
+    print(f"Response: {response}")
+    return response
 
 chatbot = gr.ChatInterface(
                 generate_response,
