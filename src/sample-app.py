@@ -58,7 +58,7 @@ llm = ChatOpenAI(base_url=model_service,
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    res = llm.invoke([HumanMessage(content=f"Hi, I'm {user_input}")])
+    res = llm.invoke([HumanMessage(content=f"Please translate the following sentence from English to German for me: {user_input}")])
     return res.content
     
 
