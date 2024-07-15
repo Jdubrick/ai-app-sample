@@ -9,6 +9,7 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
+from langchain_core.messages import HumanMessage
 
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
 model_service = f"{model_endpoint}/v1"
@@ -35,7 +36,7 @@ llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
                  api_key="EMPTY",
                  max_tokens=None,
-                 streaming=False)
+                 )
 
 # prompt = ChatPromptTemplate.from_messages(
 #     [
@@ -48,18 +49,16 @@ llm = ChatOpenAI(base_url=model_service,
 # )
 
 # chain = prompt | llm | StrOutputParser()
-prompt = PromptTemplate(
-    input_variables=["sentence"],
-    template="Translate this sentence from English to German: {sentence}?",
-)
+# prompt = PromptTemplate(
+#     input_variables=["sentence"],
+#     template="Translate this sentence from English to German: {sentence}?",
+# )
 
-chain = LLMChain(llm=llm, prompt=prompt)
+# chain = LLMChain(llm=llm, prompt=prompt)
 
 # Define a function to generate chatbot responses
 def chatbot_response(user_input):
-    print(f"User input: {user_input}")
-    res = chain.run(user_input)
-    print(f"Response: {res}")
+    res = model.invoke([HumanMessage(content="Hi, I'm Bob")])
     return res
     
 
