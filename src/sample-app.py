@@ -41,8 +41,7 @@ llm = ChatOpenAI(base_url=model_service,
                  )
 
 prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are world class technical advisor."),
-    MessagesPlaceholder(variable_name="history"),
+    ("system", "You are a helpful assistant that translates English to French. Translate the user sentence."),
     ("user", "{input}")
 ])
 
