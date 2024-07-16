@@ -52,7 +52,8 @@ chain = LLMChain(llm=llm,
 
 def handle_response(user_input, history, custom_prompt):
     result = chain.invoke({"input": user_input})
-    return result["text"]
+    history.append((user_input, result["text"]))
+    return result["text"], history
 
 chatbot = gr.ChatInterface(
                 fn=handle_response,
