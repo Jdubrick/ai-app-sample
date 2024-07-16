@@ -6,7 +6,7 @@ import gradio as gr
 from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
 from langchain_community.callbacks import StreamlitCallbackHandler
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
 from langchain.memory import ConversationBufferWindowMemory
 
 
@@ -47,12 +47,13 @@ Chat History:
 
 Follow up question: {message}
 """
-prompt = ChatPromptTemplate.from_template(template, input_variables=["chat_history", "message"])
+prompt = PromptTemplate.from_template(template, input_variables=["chat_history", "message"])
 
-chain = LLMChain(llm=llm, 
-                prompt=prompt,
-                verbose=False,
-                memory=memory)
+chain = prompt | llm
+# chain = LLMChain(llm=llm, 
+#                 prompt=prompt,
+#                 verbose=False,
+#                 memory=memory)
 
 def handle_response(message, history):
     
