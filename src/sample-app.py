@@ -66,7 +66,6 @@ chatbot = gr.ChatInterface(
                     )
                 ],
                 title="Sample Chatbot",
-                examples=["Tell me a short story.", "Who was first to the moon?"],
 )
 
 chatbot.launch()
