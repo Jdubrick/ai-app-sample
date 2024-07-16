@@ -54,7 +54,7 @@ def handle_response(user_input, history, custom_prompt):
     result = chain.invoke({"input": user_input})
     history.append(("user", user_input))
     history.append(("assistant", result["text"]))
-    return result["text"], history
+    return result["text"]
 
 chatbot = gr.ChatInterface(
                 fn=handle_response,
