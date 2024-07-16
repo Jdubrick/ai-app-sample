@@ -58,7 +58,7 @@ def handle_response(user_input, history, custom_prompt):
             content=result["text"]
         )
     )
-    return result["text"]
+    return result["text"], history
 
 chatbot = gr.ChatInterface(
                 fn=handle_response,
