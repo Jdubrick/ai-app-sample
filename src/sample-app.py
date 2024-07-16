@@ -55,11 +55,11 @@ def handle_response(user_input, history, extra):
     print(f"HISTORY: {history}")
     print(f"EXTRA: {extra}")
 
-    history.append({"role": "user", "content": user_input})
+    history.append(("user", user_input))
     result = chain.invoke(user_input)
-    history.append({"role": "assistant", "content": result})
+    history.append(("assistant", result["text"]))
     print(f"Result {result}")
-    return result
+    return result["text"]
 
 chatbot = gr.ChatInterface(
                 fn=handle_response,
