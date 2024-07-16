@@ -51,19 +51,12 @@ chain = LLMChain(llm=llm,
                 memory=memory)
 
 def handle_response(user_input, history, custom_prompt):
-    memory.save_context({"input": custom_prompt}, {"output", "Of course I will assume that role."})
-    result = chain.invoke(user_input)
-    memory.save_context({"input": user_input}, {"output": result["text"]})
+    result = chain.invoke({"input": user_input})
+    history.append(user_input, result["text"])
     return result["text"]
 
 chatbot = gr.ChatInterface(
                 fn=handle_response,
-                additional_inputs=[
-                    gr.Textbox(
-                        "Behave as if you are professional writer.",
-                        label="System Prompt"
-                    )
-                ],
                 title="Sample Chatbot",
 )
 
