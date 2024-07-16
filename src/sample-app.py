@@ -57,7 +57,7 @@ def handle_response(user_input, history, extra):
 
     history.append({"role": "user", "content": user_input})
     result = chain.invoke(user_input)
-    history.append({"role": "assistant", "content": reuslt})
+    history.append({"role": "assistant", "content": result})
     print(f"Result {result}")
     return result
 
