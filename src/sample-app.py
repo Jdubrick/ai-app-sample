@@ -4,12 +4,10 @@ import time
 
 import gradio as gr
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
-from langchain.prompts import ChatPromptTemplate
 from langchain.chains import LLMChain
-from langchain_core.messages import HumanMessage, AIMessage
+from langchain_community.callbacks import StreamlitCallbackHandler
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.memory import ConversationBufferWindowMemory
 
 
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
@@ -33,35 +31,43 @@ def checking_model_service():
 checking_model_service()
 model_name = os.getenv("MODEL_NAME", "")
 
+memory = ConversationBufferWindowMemory(return_messages=True,k=4) # Store prior 4 messages
+
+
 llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
-                 api_key="EMPTY",
-                 max_tokens=None,
-                 temperature=0
+                 api_key="no-key",
                  )
 
-def format_history(msg: str, history: list[list[str, str]], system_prompt: str):
-    chat_history = [{"role": "system", "content":system_prompt}]
-    for query, response in history:
-        chat_history.append({"role": "user", "content": query})
-        chat_history.append({"role": "assistant", "content": response})  
-    chat_history.append({"role": "user", "content": msg})
-    return chat_history
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are world class technical advisor."),
+    MessagesPlaceholder(variable_name="history"),
+    ("user", "{input}")
+])
 
-def generate_response(msg: str, history: list[list[str, str]], system_prompt: str):
-    chat_history = format_history(msg, history, system_prompt)
-    response = llm.invoke(msg)
-    return response.content
+chain = LLMChain(llm=llm, 
+                prompt=prompt,
+                verbose=False,
+                memory=memory)
+
+def handle_response(user_input, history):
+    history.append({"role": "user", "content": user_input})
+    result = chain.invoke(user_input)
+    history.append({"role": "assistant", "content": reuslt})
+    print(f"Result {result}")
+    return result
 
 chatbot = gr.ChatInterface(
-                generate_response,
+                fn=handle_response,
                 additional_inputs=[
                     gr.Textbox(
                         "Behave as if you are professional writer.",
                         label="System Prompt"
                     )
                 ],
-                description="Feel free to ask any question.",
+                title="Sample Chatbot",
+                examples=["Tell me a short story.", "Who was first to the moon?"],
+                show_progess="full",
 )
 
 chatbot.launch()
