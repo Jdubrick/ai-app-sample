@@ -39,21 +39,33 @@ llm = ChatOpenAI(base_url=model_service,
                  api_key="no-key",
                  )
 
-prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are world class technical advisor."),
-    MessagesPlaceholder(variable_name="history"),
-    ("user", "{input}")
-])
+template = """Combine the chat history and follow up question into a a search query.
+
+Chat History:
+
+{chat_history}
+
+Follow up question: {message}
+"""
+prompt = ChatPromptTemplate.from_template(template)
 
 chain = LLMChain(llm=llm, 
                 prompt=prompt,
                 verbose=False,
                 memory=memory)
 
-def handle_response(user_input, history, custom_prompt):
-    result = chain.invoke({"input": user_input})
-    history.append((user_input, result["text"]))
-    return result["text"]
+def handle_response(message, history):
+    
+    conversation = "\n\n".join([f"Human: {h}\nAssistant: {a}" for h, a in history])
+
+    result = chain.invoke(
+        message=message,
+        chat_history=conversation
+    )
+
+    print(f"RESULT: {result}")
+    return result
+
 
 chatbot = gr.ChatInterface(
                 fn=handle_response,
