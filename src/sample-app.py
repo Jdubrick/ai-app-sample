@@ -47,7 +47,7 @@ Chat History:
 
 Follow up question: {message}
 """
-prompt = PromptTemplate.from_template(template, input_variables=["chat_history", "message"])
+prompt = PromptTemplate.from_template(template)
 
 chain = prompt | llm
 # chain = LLMChain(llm=llm, 
