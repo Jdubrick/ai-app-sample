@@ -57,9 +57,8 @@ chain = LLMChain(llm=llm,
 def handle_response(message, history):
     
     conversation = "\n\n".join([f"Human: {h}\nAssistant: {a}" for h, a in history])
-
-    result = chain.invoke(
-        input={
+    print(f"CONVERSATION: {conversation}")
+    result = chain.invoke({
             "chat_history": conversation,
             "message": message
         }
