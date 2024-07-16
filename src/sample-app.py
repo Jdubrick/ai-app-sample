@@ -51,7 +51,7 @@ chain = LLMChain(llm=llm,
                 memory=memory)
 
 def handle_response(user_input, history, custom_prompt):
-    memory.save_context({"input": custom_prompt})
+    memory.save_context({"input": custom_prompt}, {"output", "Of course I will assume that role."})
     result = chain.invoke(user_input)
     memory.save_context({"input": user_input}, {"output": result["text"]})
     return result["text"]
