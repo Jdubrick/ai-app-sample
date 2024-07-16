@@ -52,7 +52,12 @@ chain = LLMChain(llm=llm,
 
 def handle_response(user_input, history, custom_prompt):
     result = chain.invoke({"input": user_input})
-    history.append({"role": "assistant", "content": result["text"]})
+    history.append(
+        gr.ChatMessage(
+            role="assistant",
+            content=result["text"]
+        )
+    )
     return result["text"]
 
 chatbot = gr.ChatInterface(
