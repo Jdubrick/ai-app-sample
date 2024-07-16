@@ -50,7 +50,11 @@ chain = LLMChain(llm=llm,
                 verbose=False,
                 memory=memory)
 
-def handle_response(user_input, history):
+def handle_response(user_input, history, extra):
+    print(f"INPUT: {user_input}")
+    print(f"HISTORY: {history}")
+    print(f"EXTRA: {extra}")
+
     history.append({"role": "user", "content": user_input})
     result = chain.invoke(user_input)
     history.append({"role": "assistant", "content": reuslt})
