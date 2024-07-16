@@ -59,8 +59,10 @@ def handle_response(message, history):
     conversation = "\n\n".join([f"Human: {h}\nAssistant: {a}" for h, a in history])
 
     result = chain.invoke(
-        {"chat_history": conversation,
-        "message": message}
+        input={
+            "chat_history": conversation,
+            "message": message
+        }
     )
 
     print(f"RESULT: {result}")
