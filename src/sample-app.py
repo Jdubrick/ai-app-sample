@@ -64,7 +64,7 @@ def handle_response(message, history):
     )
 
     print(f"RESULT: {result}")
-    return result
+    return result.content
 
 
 chatbot = gr.ChatInterface(
