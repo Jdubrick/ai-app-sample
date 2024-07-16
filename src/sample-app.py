@@ -39,13 +39,12 @@ llm = ChatOpenAI(base_url=model_service,
                  api_key="no-key",
                  )
 
-template = """Combine the chat history and follow up question into a a search query.
+template = """You are the best advisor in the world.
 
-Chat History:
+A user has come to you and asks the following question:
+{message}
 
-{chat_history}
-
-Follow up question: {message}
+If you need to ask clarifying questions you may do so.
 """
 prompt = PromptTemplate.from_template(template)
 
@@ -60,7 +59,6 @@ def handle_response(message, history):
     conversation = "\n\n".join([f"Human: {h}\nAssistant: {a}" for h, a in history])
     print(f"CONVERSATION: {conversation}")
     result = chain.invoke({
-            "chat_history": conversation,
             "message": message
         }
     )
