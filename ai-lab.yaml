@@ -23,5 +23,5 @@ application:
         - arm64
         - amd64
       ports:
-        - 7860
+        - 8501
       image: quay.io/jdubrick-ai/new-sample-app:latest

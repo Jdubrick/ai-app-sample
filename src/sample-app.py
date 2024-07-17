@@ -77,4 +77,4 @@ chatbot = gr.ChatInterface(
                 title="Sample Chatbot",
 )
 
-chatbot.launch()
+chatbot.launch(server_port=8501)
