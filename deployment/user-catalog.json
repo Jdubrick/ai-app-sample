@@ -12,11 +12,26 @@
       "readme": "# Local Deployment\nInstructions for deploying locally here or readme about the project",
       "models": [
         "hf.instructlab.granite-7b-lab-GGUF",
-        "hf.instructlab.merlinite-7b-lab-GGUF"
+        "hf.instructlab.merlinite-7b-lab-GGUF",
+        "my-imported-test-model"
       ]
     }
 	],
-  "models": [],
+  "models": [
+    {
+      "id": "my-imported-test-model",
+      "name": "my-imported-test-model",
+      "description": "# A model I imported for testing",
+      "hw": "CPU",
+      "registry": "Hugging Face",
+      "url": "https://huggingface.co/MaziyarPanahi/Codestral-22B-v0.1-GGUF/resolve/main/Codestral-22B-v0.1-hf.IQ1_S.gguf",
+      "memory": 5180982010,
+      "properties": {
+        "chatFormat": "openchat"
+      },
+      "sha256": "ad737370fc21c82d55f08f5ecf1ecdea1dbdf800ebe4b97d8afa82be902fec9d"
+    }
+  ],
   "categories": [
     {
         "id": "local-development",
