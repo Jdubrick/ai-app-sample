@@ -64,7 +64,12 @@ def handle_response(message, history):
     )
 
     print(f"RESULT: {result}")
-    return result.content
+    output_resp = ""
+    for char in result.content:
+        output_resp += char
+        time.sleep(0.03)
+        yield output_resp
+    # return result.content
 
 
 chatbot = gr.ChatInterface(
