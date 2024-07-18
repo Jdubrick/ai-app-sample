@@ -5,9 +5,7 @@ import time
 import gradio as gr
 from langchain_openai import ChatOpenAI
 from langchain.chains import LLMChain
-from langchain_community.callbacks import StreamlitCallbackHandler
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, PromptTemplate
-from langchain.memory import ConversationBufferWindowMemory
+from langchain_core.prompts import PromptTemplate
 
 
 model_endpoint = os.getenv("MODEL_ENDPOINT", "http://localhost:8001")
@@ -30,8 +28,6 @@ def checking_model_service():
 
 checking_model_service()
 model_name = os.getenv("MODEL_NAME", "")
-
-memory = ConversationBufferWindowMemory(return_messages=True,k=4)
 
 llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
