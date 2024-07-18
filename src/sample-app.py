@@ -31,8 +31,7 @@ def checking_model_service():
 checking_model_service()
 model_name = os.getenv("MODEL_NAME", "")
 
-memory = ConversationBufferWindowMemory(return_messages=True,k=4) # Store prior 4 messages
-
+memory = ConversationBufferWindowMemory(return_messages=True,k=4)
 
 llm = ChatOpenAI(base_url=model_service,
                  model=model_name,
@@ -49,27 +48,17 @@ If you need to ask clarifying questions you may do so.
 prompt = PromptTemplate.from_template(template)
 
 chain = prompt | llm
-# chain = LLMChain(llm=llm, 
-#                 prompt=prompt,
-#                 verbose=False,
-#                 memory=memory)
 
 def handle_response(message, history):
-    
-    conversation = "\n\n".join([f"Human: {h}\nAssistant: {a}" for h, a in history])
-    print(f"CONVERSATION: {conversation}")
     result = chain.invoke({
             "message": message
         }
     )
-
-    print(f"RESULT: {result}")
     output_resp = ""
     for char in result.content:
         output_resp += char
         time.sleep(0.03)
         yield output_resp
-    # return result.content
 
 
 chatbot = gr.ChatInterface(
