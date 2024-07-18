@@ -24,7 +24,7 @@
       "description": "# A model I imported for testing",
       "hw": "CPU",
       "registry": "Hugging Face",
-      "url": "https://huggingface.co/MaziyarPanahi/Codestral-22B-v0.1-GGUF/resolve/main/Codestral-22B-v0.1-hf.IQ1_S.gguf",
+      "url": "https://huggingface.co/MaziyarPanahi/Mistral-7B-Instruct-v0.3-GGUF/resolve/main/Mistral-7B-Instruct-v0.3.Q5_K_M.gguf",
       "memory": 5180982010,
       "properties": {
         "chatFormat": "openchat"
